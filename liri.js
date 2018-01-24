@@ -1,4 +1,4 @@
-console.log("=========================================================================================================================================================================================================================================================================================================================================================")
+console.log("=========================================================================================================================================================================================================================================================================================================================================================");
 
 // grabs the user command
 var userCommand = process.argv[2];
@@ -35,36 +35,19 @@ switch (userCommand) {
 			id: "7b29b2971c6d4970a33b8b9183b35148",
 			secret: "d4ac8e40d9534340839dc72f053e3ebb"
 
-		// var spotifyID = "7b29b2971c6d4970a33b8b9183b35148";
-		// var spotifySecret = "d4ac8e40d9534340839dc72f053e3ebb";
-
 		});
-
-		console.log("spotify", spotify);
-
-		// spotify.search({
-		// 	type: "track",
-		// 	query: searchSong,
-		// 	function(err, data) {
-		// 		if (err) {
-		// 			console.log("spotify error");
-		// 			console.log("err", err);
-		// 		}
-		// 		else {
-		// 			console.log(data);
-		// 		}
-		// 	}
-		// })
 
 		spotify.search({
 			type: "track",
 			query: searchSong,
 		})
 		.then(function(response) {
-			// console.log(response);
-			// console.log(response.tracks);
+			// console.log(response.tracks.items[0].preview_url);
+			
 			console.log("Artist: " + response.tracks.items[0].artists[0].name);
 			console.log("Song name: " + response.tracks.items[0].name);
+			console.log("Preview link: " + response.tracks.items[0].preview_url);
+			console.log("Album name: " + response.tracks.items[0].album.name);
 		})
 		.catch(function(err) {
 			console.log(err);
