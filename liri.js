@@ -2,7 +2,14 @@ console.log("===================================================================
 
 // grabs the user command
 var userCommand = process.argv[2];
-console.log("userCommand", userCommand);	
+console.log("userCommand", userCommand);
+
+var Spotify = require("node-spotify-api");
+var spotify = new Spotify({
+	id: "7b29b2971c6d4970a33b8b9183b35148",
+	secret: "d4ac8e40d9534340839dc72f053e3ebb"
+
+});	
 
 // checks the userCommand vs available options
 switch (userCommand) {
@@ -29,13 +36,6 @@ switch (userCommand) {
 		console.log("spotify-this-song");
 		var searchSong = process.argv[3];
 		console.log("searchSong", searchSong);
-
-		var Spotify = require("node-spotify-api");
-		var spotify = new Spotify({
-			id: "7b29b2971c6d4970a33b8b9183b35148",
-			secret: "d4ac8e40d9534340839dc72f053e3ebb"
-
-		});
 
 		spotify.search({
 			type: "track",
@@ -74,10 +74,52 @@ switch (userCommand) {
 			}
 			else {
 				console.log(error);
+				// I've never seen Mr Nobody and don't feel right defaulting to it!
+				// jk but i'm limited on time and would rather explore the other functions available
+				// i will return to this
 			}
 		});
 
 		break;
+
+	case "do-what-it-says": 
+		var fs = require("fs");
+		fs.readFile("random.txt", "utf8", function(error, data) {
+			if (error) {
+				console.log("do-what-it-says error", error);
+			}
+
+			console.log("data", data);
+			var doItArray = data.split(",");
+			console.log("doItArray", doItArray);
+
+			var randomMethod = doItArray[0];
+			var searchSong = doItArray[1];
+
+			console.log("randomMethod", randomMethod);
+			console.log("searchSong", searchSong);
+
+			if (randomMethod === "spotify-this-song") {
+				spotify.search({
+					type: "track",
+					query: searchSong,
+				})
+				.then(function(response) {
+					console.log("Artist: " + response.tracks.items[0].artists[0].name);
+					console.log("Song name: " + response.tracks.items[0].name);
+					console.log("Preview link: " + response.tracks.items[0].preview_url);
+					console.log("Album name: " + response.tracks.items[0].album.name);
+				})
+				.catch(function(err) {
+					console.log(err);
+				});
+			}
+			else {
+				console.log("Invalid command in random.txt");
+			}
+		})
+		break;
+
 
 	// when no valid option is input, shows an error code
 	default: 
